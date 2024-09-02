@@ -1,0 +1,185 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Atualizar Usuários</title>
+    <style>
+        body {
+            font-family: Arial, sans-serif;
+            margin: 0;
+            padding: 0;
+        }
+        h1 {
+            text-align: center;
+        }
+        table {
+            width: 80%;
+            margin: 20px auto;
+            border-collapse: collapse;
+        }
+        th, td {
+            border: 1px solid #ddd;
+            padding: 8px;
+            text-align: center;
+        }
+        th {
+            background-color: #f2f2f2;
+        }
+        form {
+            text-align: center;
+            margin-bottom: 20px;
+        }
+        input[type="text"] {
+            padding: 5px;
+            width: 200px;
+            margin-right: 10px;
+            border: 1px solid #ccc;
+            border-radius: 4px;
+        }
+        button {
+            background-color: #4CAF50;
+            color: white;
+            padding: 10px 20px;
+            border: none;
+            border-radius: 4px;
+            cursor: pointer;
+            transition: background-color 0.3s ease;
+        }
+        button:hover {
+            background-color: #45a049;
+        }
+        input[type="file"] {
+            margin-top: 5px;
+        }
+    </style>
+</head>
+<body>
+    <h1>Atualizar Usuários</h1>
+    <form id="searchForm">
+        <input type="text" id="searchQuery" placeholder="Digite o nome, telefone, senha ou ID">
+        <button type="submit">Pesquisar</button>
+    </form>
+    <table id="usersTable">
+        <tr>
+            <th>ID</th>
+            <th>Nome</th>
+            <th>Telefone</th>
+            <th>Senha</th>
+            <th>Imagem</th>
+            <th>Ações</th>
+        </tr>
+    </table>
+    <script>
+        document.addEventListener('DOMContentLoaded', function () {
+            fetch(`/usuarios`)
+                .then(response => response.json())
+                .then(data => {
+                    const table = document.getElementById('usersTable');
+                    table.innerHTML = `
+                        <tr>
+                            <th>ID</th>
+                            <th>Nome</th>
+                            <th>Telefone</th>
+                            <th>Senha</th>
+                            <th>Imagem</th>
+                            <th>Ações</th>
+                        </tr>
+                    `;
+                    data.forEach(user => {
+                        const row = document.createElement('tr');
+                        
+                        row.innerHTML = `
+                            <td>${user.id}</td>
+                            <td><input type="text" value="${user.nome}" id="nome-${user.id}"></td>
+                            <td><input type="text" value="${user.telefone}" id="telefone-${user.id}"></td>
+                            <td><input type="text" value="${user.senha}" id="senha-${user.id}"></td>
+                            <td>
+                                <img src="/uploads/${user.imagem}" alt="${user.nome}" width="50">
+                                <input type="file" id="imagem-${user.id}">
+                            </td>
+                            <td><button onclick="updateUser(${user.id})">Atualizar</button></td>
+                        `;
+                        
+                        table.appendChild(row);
+                    });
+                })
+                .catch(error => {
+                    console.error('Erro ao buscar usuários:', error);
+                    alert('Erro ao buscar usuários. Por favor, tente novamente.');
+                });
+        });
+
+        document.getElementById('searchForm').addEventListener('submit', function (e) {
+            e.preventDefault();
+            const query = document.getElementById('searchQuery').value;
+            fetch(`/search-results?query=${query}`)
+                .then(response => response.json())
+                .then(data => {
+                    const table = document.getElementById('usersTable');
+                    table.innerHTML = `
+                        <tr>
+                            <th>ID</th>
+                            <th>Nome</th>
+                            <th>Telefone</th>
+                            <th>Senha</th>
+                            <th>Imagem</th>
+                            <th>Ações</th>
+                        </tr>
+                    `;
+                    data.forEach(user => {
+                        const row = document.createElement('tr');
+                        
+                        row.innerHTML = `
+                            <td>${user.id}</td>
+                            <td><input type="text" value="${user.nome}" id="nome-${user.id}"></td>
+                            <td><input type="text" value="${user.telefone}" id="telefone-${user.id}"></td>
+                            <td><input type="text" value="${user.senha}" id="senha-${user.id}"></td>
+                            <td>
+                                <img src="/uploads/${user.imagem}" alt="${user.nome}" width="50">
+                                <input type="file" id="imagem-${user.id}">
+                            </td>
+                            <td><button onclick="updateUser(${user.id})">Atualizar</button></td>
+                        `;
+                        
+                        table.appendChild(row);
+                    });
+                })
+                .catch(error => {
+                    console.error('Erro ao buscar usuários:', error);
+                    alert('Erro ao buscar usuários. Por favor, tente novamente.');
+                });
+        });
+
+        function updateUser(id) {
+            const name = document.getElementById(`nome-${id}`).value;
+            const phone = document.getElementById(`telefone-${id}`).value;
+            const password = document.getElementById(`senha-${id}`).value;
+            const imageInput = document.getElementById(`imagem-${id}`);
+
+            const formData = new FormData();
+            formData.append('id', id);
+            formData.append('name', name);
+            formData.append('phone', phone);
+            formData.append('password', password);
+            if (imageInput.files[0]) {
+                formData.append('image', imageInput.files[0]);
+            }
+
+            fetch('/update', {
+                method: 'POST',
+                body: formData
+            })
+            .then(response => response.text())
+            .then(data => {
+                alert(data);
+                location.reload();
+            })
+            .catch(error => {
+                console.error('Erro ao atualizar o usuário:', error);
+                alert('Erro ao atualizar o usuário. Por favor, tente novamente.');
+            });
+        }
+    </script>
+</body>
+</html>

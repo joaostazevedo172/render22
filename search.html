@@ -1,0 +1,110 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Pesquisar Usuários</title>
+    <style>
+        body {
+            font-family: Arial, sans-serif;
+            margin: 0;
+            padding: 0;
+        }
+        h1 {
+            text-align: center;
+        }
+        table {
+            width: 80%;
+            margin: 20px auto;
+            border-collapse: collapse;
+        }
+        th, td {
+            border: 1px solid #ddd;
+            padding: 8px;
+            text-align: center;
+        }
+        th {
+            background-color: #f2f2f2;
+        }
+        #searchForm {
+            text-align: center;
+            margin: 20px auto;
+            max-width: 400px;
+        }
+        #searchQuery {
+            padding: 10px;
+            width: 60%;
+            border: 1px solid #ccc;
+            border-radius: 4px 0 0 4px;
+            font-size: 16px;
+            box-sizing: border-box;
+        }
+        #searchQuery:focus {
+            outline: none;
+            border-color: #4CAF50;
+        }
+        #searchButton {
+            padding: 10px 20px;
+            background-color: #4CAF50;
+            color: white;
+            border: 1px solid #4CAF50;
+            border-radius: 0 4px 4px 0;
+            cursor: pointer;
+            font-size: 16px;
+            transition: background-color 0.3s ease;
+        }
+        #searchButton:hover {
+            background-color: #45a049;
+        }
+    </style>
+</head>
+<body>
+    <h1>Pesquisar Usuários</h1>
+    <form id="searchForm">
+        <input type="text" id="searchQuery" placeholder="Digite o nome, telefone, senha ou ID">
+        <button type="submit" id="searchButton">Pesquisar</button>
+    </form>
+    <table id="usersTable">
+        <tr>
+            <th>ID</th>
+            <th>Nome</th>
+            <th>Telefone</th>
+            <th>Senha</th>
+            <th>Imagem</th>
+        </tr>
+    </table>
+    <script>
+        document.getElementById('searchForm').addEventListener('submit', function (e) {
+            e.preventDefault();
+            const query = document.getElementById('searchQuery').value;
+            fetch(`/search-results?query=${query}`)
+                .then(response => response.json())
+                .then(data => {
+                    const table = document.getElementById('usersTable');
+                    table.innerHTML = `
+                        <tr>
+                            <th>ID</th>
+                            <th>Nome</th>
+                            <th>Telefone</th>
+                            <th>Senha</th>
+                            <th>Imagem</th>
+                        </tr>
+                    `;
+                    data.forEach(user => {
+                        const row = document.createElement('tr');
+                        
+                        row.innerHTML = `
+                            <td>${user.id}</td>
+                            <td>${user.nome}</td>
+                            <td>${user.telefone}</td>
+                            <td>${user.senha}</td>
+                            <td><img src="/image/${user.id}" alt="${user.nome}" width="50"></td>
+                        `;
+                        
+                        table.appendChild(row);
+                    });
+                });
+        });
+    </script>
+</body>
+</html>
