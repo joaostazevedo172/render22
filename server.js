@@ -13,10 +13,10 @@ app.use(bodyParser.json()); // Adicionei para suportar JSON no corpo da requisi�
 
 // Configuração da conexão com o banco de dados
 const con = mysql.createConnection({
-    host: process.env.DB_HOST || "sql110.byetcluster.com",
+    host: process.env.DB_HOST || "sql110.byethost33.com",
     user: process.env.DB_USER || "b33_37133203",
     password: process.env.DB_PASSWORD || "Epa2548J@",
-    database: process.env.DB_NAME || "b33_37133203_swiii",
+    database: process.env.DB_NAME || "b33_37133203_render",
     connectTimeout: 10000 // 10 segundos de timeout
 });
 
