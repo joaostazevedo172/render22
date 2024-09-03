@@ -17,7 +17,7 @@ const con = mysql.createConnection({
     user: process.env.DB_USER || "b33_37133203",
     password: process.env.DB_PASSWORD || "Epa2548J@",
     database: process.env.DB_NAME || "b33_37133203_render",
-    connectTimeout: 10000 // 10 segundos de timeout
+    connectTimeout: 90000 // 10 segundos de timeout
 });
 
 con.connect(function (err) {
