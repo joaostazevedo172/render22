@@ -13,10 +13,10 @@ app.use(bodyParser.json()); // Adicionei para suportar JSON no corpo da requisi�
 
 // Configuração da conexão com o banco de dados
 const con = mysql.createConnection({
-    host: process.env.DB_HOST || "sql110.byethost33.com",
-    user: process.env.DB_USER || "b33_37133203",
-    password: process.env.DB_PASSWORD || "Epa2548J@",
-    database: process.env.DB_NAME || "b33_37133203_render",
+    host: process.env.DB_HOST || "localhost",
+    user: process.env.DB_USER || "root",
+    password: process.env.DB_PASSWORD || "",
+    database: process.env.DB_NAME || "render",
     connectTimeout: 90000 // 10 segundos de timeout
 });
 
@@ -77,7 +77,7 @@ app.get('/usuarios', (req, res) => {
 // Rota para adicionar um novo usuário
 app.post('/submit', upload.single('image'), (req, res) => {
     const { name, password, phone } = req.body;
-    const image = req.file ? req.file.buffer.toString('base64') : null; // Converte a imagem para base64
+    const image = req.file ? req.file.buffer : null; // Armazena a imagem como buffer
 
     const sql = "INSERT INTO usuario (nome, senha, telefone, imagem) VALUES (?, ?, ?, ?)";
     con.query(sql, [name, password, phone, image], function (err, result) {
@@ -160,7 +160,7 @@ app.get('/image/:id', (req, res) => {
         }
         const image = result[0].imagem;
         res.setHeader('Content-Type', 'image/jpeg'); // Ajuste o tipo de imagem conforme necessário
-        res.send(Buffer.from(image, 'base64'));
+        res.send(image);
     });
 });
 
