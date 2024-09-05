@@ -14,7 +14,7 @@ app.use(bodyParser.json()); // Adicionei para suportar JSON no corpo da requisi�
 // Configuração da conexão com o banco de dados
 const con = mysql.createConnection({
     host: process.env.DB_HOST || "mysql11.serv00.com",
-    user: process.env.DB_USER || "m2893_joao-22212",
+    user: process.env.DB_USER || "m2893",
     password: process.env.DB_PASSWORD || "Epa2548J@",
     database: process.env.DB_NAME || "m2893_render",
     connectTimeout: 9000000 // 10 segundos de timeout
