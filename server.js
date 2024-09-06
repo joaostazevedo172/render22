@@ -13,7 +13,7 @@ app.use(bodyParser.json()); // Adicionei para suportar JSON no corpo da requisi�
 
 // Configuração da conexão com o banco de dados
 const con = mysql.createConnection({
-    host: process.env.DB_HOST || "localhost:3306",
+    host: process.env.DB_HOST || "localhost",
     user: process.env.DB_USER || "joaoazevedo_22212",
     password: process.env.DB_PASSWORD || "Epa2548J@",
     database: process.env.DB_NAME || "joaoazevedo_render",
