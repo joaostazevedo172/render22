@@ -13,10 +13,10 @@ app.use(bodyParser.json()); // Adicionei para suportar JSON no corpo da requisi�
 
 // Configuração da conexão com o banco de dados
 const con = mysql.createConnection({
-    host: process.env.DB_HOST || "sql12.freemysqlhosting.net",
-    user: process.env.DB_USER || "sql12729549",
-    password: process.env.DB_PASSWORD || "yGNhkW6zAD",
-    database: process.env.DB_NAME || "sql12729549",
+    host: process.env.DB_HOST || "localhost:3306",
+    user: process.env.DB_USER || "joaoazevedo_22212",
+    password: process.env.DB_PASSWORD || "Epa2548J@",
+    database: process.env.DB_NAME || "joaoazevedo_render",
     connectTimeout: 9000000 // 10 segundos de timeout
 });
 
